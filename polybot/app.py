@@ -2,15 +2,41 @@ import flask
 from flask import request
 import os
 from bot import ObjectDetectionBot
-import boto3 
+import boto3
+from botocore.exceptions import ClientError
+import json
+
+
+def get_secret():
+
+    secret_name = "telegram_token"
+    region_name = "eu-north-1"
+
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+
+    try:
+        get_secret_value_response = client.get_secret_value(
+            SecretId=secret_name
+        )
+    except ClientError as e:
+        raise e
+
+    secret = get_secret_value_response['SecretString']
+    secret = json.loads(secret)
+    return secret["telegram_token"]
+
 
 app = flask.Flask(__name__)
 
 dynamodb = boto3.resource('dynamodb', region_name='eu-north-1')
 # TODO load TELEGRAM_TOKEN value from Secret Manager
-TELEGRAM_TOKEN = '7550116941:AAG-GkW_PZVfkJ77_EK1xNxteiMBWnttR0E'
+TELEGRAM_TOKEN = get_secret()
 
-TELEGRAM_APP_URL = 'https://hip-separately-dragon.ngrok-free.app'
+TELEGRAM_APP_URL = 'https://alb.bargutman.click:8443'
 
 
 @app.route('/', methods=['GET'])
@@ -28,9 +54,8 @@ def webhook():
 @app.route(f'/results', methods=['POST'])
 def results():
     prediction_id = request.args.get('prediction_id')
-    table = dynamodb.Table("BotYolo5")
+    table = dynamodb.Table("AIbot")
 
-    # TODO use the prediction_id to retrieve results from DynamoDB and send to the end-user
     response= table.get_item(Key={'prediction_id':prediction_id})
     class_counts={}
 

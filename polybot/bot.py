@@ -80,7 +80,7 @@ class ObjectDetectionBot(Bot):
     
             # TODO upload photo_path to S3\
             s3 = boto3.client('s3')
-            bucket_name = "bot.service.aws"
+            bucket_name = "polobot.s3.bucket"
             image_name = os.path.basename(photo_path)
             key_name = f'{chat_id}/{image_name}'
             s3.upload_file(photo_path, bucket_name, key_name)
@@ -90,7 +90,7 @@ class ObjectDetectionBot(Bot):
 
             # TODO send a job to the SQS queue
             sqs_client = boto3.client('sqs' ,region_name='eu-north-1')
-            queue_url = 'https://sqs.eu-north-1.amazonaws.com/590183945610/ServiceBotPoly'
+            queue_url = 'https://sqs.eu-north-1.amazonaws.com/590183945610/polyBotSQS'
 
             # Create message body
             message_body = {

@@ -10,8 +10,8 @@ import boto3
 import requests
 
 
-images_bucket = "bot.service.aws"
-queue_name = "https://sqs.eu-north-1.amazonaws.com/590183945610/ServiceBotPoly"
+images_bucket = "polobot.s3.bucket"
+queue_name = "https://sqs.eu-north-1.amazonaws.com/590183945610/polyBotSQS"
 
 sqs_client = boto3.client('sqs', region_name='eu-north-1')
 s3 = boto3.client('s3')
@@ -96,7 +96,7 @@ def consume():
                 }
 
                 # TODO store the prediction_summary in a DynamoDB table
-                table = dynamodb_clinet.Table("BotYolo5")
+                table = dynamodb_clinet.Table("AIbot")
                 try:
                     table.put_item(Item=prediction_summary)
                     logger.info(f'It Work!! Successfully stored prediction summary for {prediction_id}')
@@ -105,7 +105,7 @@ def consume():
                 
 
                 # TODO perform a GET request to Polybot to `/results` endpoint
-                loadbalancer_domain = "https://hip-separately-dragon.ngrok-free.app"
+                loadbalancer_domain = 'https://alb.bargutman.click:8443'
                 try:
                     response = requests.post(f'{loadbalancer_domain}/results', params={'prediction_id': prediction_id})
                     response.raise_for_status()  # Raise an exception for HTTP errors (4xx or 5xx)
