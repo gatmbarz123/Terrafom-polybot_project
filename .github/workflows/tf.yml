@@ -17,7 +17,7 @@ jobs:
       
       
       - name: Setup Terrafrom 
-        uses: hashicorp/setup-terrafrom@v2
+        uses: hashicorp/setup-terraform@v2
         with:
           terrafrom_version: 1.5.0
      
