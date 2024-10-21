@@ -6,11 +6,14 @@ import boto3
 from botocore.exceptions import ClientError
 import json
 
+aws_region  =   os.getenv("AWS_REGION")
+dynamodb_table=os.getenv("DYNAMODB_TABLE")
+alb_url =   os.getenv("ALB_URL")
 
 def get_secret():
 
     secret_name = "telegram_token"
-    region_name = "eu-north-1"
+    region_name = aws_region
 
     session = boto3.session.Session()
     client = session.client(
@@ -32,11 +35,11 @@ def get_secret():
 
 app = flask.Flask(__name__)
 
-dynamodb = boto3.resource('dynamodb', region_name='eu-north-1')
+dynamodb = boto3.resource('dynamodb', region_name=aws_region)
 # TODO load TELEGRAM_TOKEN value from Secret Manager
 TELEGRAM_TOKEN = get_secret()
 
-TELEGRAM_APP_URL = 'https://alb.bargutman.click:8443'
+TELEGRAM_APP_URL = f'https://{alb_url}:8443'
 
 
 @app.route('/', methods=['GET'])
@@ -54,7 +57,7 @@ def webhook():
 @app.route(f'/results', methods=['POST'])
 def results():
     prediction_id = request.args.get('prediction_id')
-    table = dynamodb.Table("AIbot")
+    table = dynamodb.Table(dynamodb_table)
 
     response= table.get_item(Key={'prediction_id':prediction_id})
     class_counts={}

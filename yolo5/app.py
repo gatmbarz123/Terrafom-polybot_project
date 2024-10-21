@@ -9,13 +9,18 @@ import os
 import boto3
 import requests
 
+aws_region  =   os.getenv("AWS_REGION")
+dynamodb_table=os.getenv("DYNAMODB_TABLE")
+alb_url =   os.getenv("ALB_URL")
+s3_bucket   =   os.getenv("S3_BUCKET")
+sqs_url =   os.getenv("SQS_URL")
 
-images_bucket = "polobot.s3.bucket"
-queue_name = "https://sqs.eu-north-1.amazonaws.com/590183945610/polyBotSQS"
+images_bucket = s3_bucket
+queue_name = sqs_url
 
-sqs_client = boto3.client('sqs', region_name='eu-north-1')
+sqs_client = boto3.client('sqs', region_name= aws_region)
 s3 = boto3.client('s3')
-dynamodb_clinet = boto3.resource('dynamodb', region_name='eu-north-1')
+dynamodb_clinet = boto3.resource('dynamodb', region_name= aws_region)
 
 with open("data/coco128.yaml", "r") as stream:
     names = yaml.safe_load(stream)['names']
@@ -96,7 +101,7 @@ def consume():
                 }
 
                 # TODO store the prediction_summary in a DynamoDB table
-                table = dynamodb_clinet.Table("AIbot")
+                table = dynamodb_clinet.Table(dynamodb_table)
                 try:
                     table.put_item(Item=prediction_summary)
                     logger.info(f'It Work!! Successfully stored prediction summary for {prediction_id}')
@@ -105,7 +110,7 @@ def consume():
                 
 
                 # TODO perform a GET request to Polybot to `/results` endpoint
-                loadbalancer_domain = 'https://alb.bargutman.click:8443'
+                loadbalancer_domain = f'https://{alb_url}:8443'
                 try:
                     response = requests.post(f'{loadbalancer_domain}/results', params={'prediction_id': prediction_id})
                     response.raise_for_status()  # Raise an exception for HTTP errors (4xx or 5xx)

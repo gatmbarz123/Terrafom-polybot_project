@@ -36,3 +36,7 @@ variable "certificate_arn" {
 
 }
 
+variable "private_key_path"{
+   description = "The private path key aws"
+   type        = string
+}

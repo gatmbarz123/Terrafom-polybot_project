@@ -55,4 +55,5 @@ module "yolo5" {
     key_pairs           = var.key_pairs
     vpc_id = module.vpc.vpc_id 
     subnet_id = module.vpc.public_subnets
+    private_key_path  = var.private_key_path
 }

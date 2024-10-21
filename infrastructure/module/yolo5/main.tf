@@ -1,3 +1,53 @@
+resource "aws_instance" "yolo5_image"{
+  ami           = var.ami_id
+  instance_type = var.instance_type
+  vpc_security_group_ids = [aws_security_group.yolo5_sg.id]
+  key_name  =   var.key_pairs
+  subnet_id = var.subnet_id[0] 
+
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    private_key = file("/home/gatmbarz123/Desktop/Keys/StockKey.pem")  
+    host        = self.public_ip
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt update -y",
+      "sudo apt install -y docker.io",            
+      "sudo systemctl start docker",
+      "sudo systemctl enable docker",
+      "sudo docker pull diskoproject/yolo5v1",
+      "sudo docker run -d --restart always diskoproject/yolo5v1"
+    ]
+  }
+
+
+
+
+  tags = {
+    Name = "ami_yolo5"
+  }
+}
+
+resource "aws_ami_from_instance" "ami_yolo5" {
+  name               = "ami_yolo5"
+  source_instance_id = aws_instance.yolo5_image.id
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "null_resource" "terminate_instance" {
+  provisioner "local-exec" {
+    command = "aws ec2 terminate-instances --instance-ids ${aws_instance.yolo5_image.id} --output json"
+  }
+
+  depends_on = [aws_ami_from_instance.ami_yolo5]
+}
+
+
 resource "aws_security_group" "yolo5_sg" {
   name        = "yolo5_sg_new"   
   description = "Allow SSH and 8443 traffic"
@@ -9,6 +59,19 @@ resource "aws_security_group" "yolo5_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
   egress {
     from_port   = 0
     to_port     = 0
@@ -38,7 +101,7 @@ resource "aws_autoscaling_group" "as-yolo5" {
 
 resource "aws_launch_template" "lt-as-yolo5" {
   name_prefix   = "lt-as-yolo5"
-  image_id      = var.ami_id
+  image_id      = aws_ami_from_instance.ami_yolo5.id
   instance_type = var.instance_type
   key_name = var.key_pairs
   

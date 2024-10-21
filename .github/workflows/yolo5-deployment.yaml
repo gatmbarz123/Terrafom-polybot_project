@@ -5,7 +5,7 @@ on:
     paths:
       - 'yolo5/**'
     branches:
-      - main
+      - dev
 
 jobs:
   Build:

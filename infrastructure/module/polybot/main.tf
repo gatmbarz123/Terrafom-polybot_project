@@ -6,7 +6,13 @@ resource "aws_instance" "polybot" {
   key_name  =   var.key_pairs
   subnet_id = var.subnet_id[count.index % length(var.subnet_id)]
   iam_instance_profile = aws_iam_instance_profile.profile-polybot.name
-  
+
+  user_data = <<-EOF
+              #!/bin/bash
+              sudo apt-get update -y
+              sudo apt-get install -y ansible
+              EOF
+
 
   tags = {
     Name = "polybot-${count.index}"
