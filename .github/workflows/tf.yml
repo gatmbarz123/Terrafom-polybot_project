@@ -5,7 +5,7 @@ on:
     paths:
       - 'infrastructure/**'
     branches:
-      - main
+      - CI-Terraform
 
 
 jobs: 
