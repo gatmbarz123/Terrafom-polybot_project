@@ -11,6 +11,9 @@ on:
 jobs: 
   Build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infrastructure
     steps:
       - name: Checkout the repo code
         uses: actions/checkout@v3
