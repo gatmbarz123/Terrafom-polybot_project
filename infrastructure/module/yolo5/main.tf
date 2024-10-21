@@ -8,7 +8,7 @@ resource "aws_instance" "yolo5_image"{
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = file("/home/gatmbarz123/Desktop/Keys/StockKey.pem")  
+    private_key = var.private_key  
     host        = self.public_ip
   }
 

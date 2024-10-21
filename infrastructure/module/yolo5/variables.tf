@@ -22,7 +22,7 @@ variable "subnet_id" {
   type        = list(string)
 }
 
-variable "private_key_path"{
+variable "private_key"{
    description = "The private path key aws"
    type        = string
 }
