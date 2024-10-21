@@ -35,7 +35,7 @@ jobs:
         run: terraform init
    
       - name: Terraform Plan
-        run: terraform -chdir=infrastructure plan -var-file var.tfvars -var certificate_arn=${{ secrets.CERTIFICATE_ARN }} -var private_key=${{ secrets.PRIVATE_KEY }}
+        run: terraform -chdir=PolyBot/infrastructure plan -var-file var.tfvars -var certificate_arn=${{ secrets.CERTIFICATE_ARN }} -var private_key=${{ secrets.PRIVATE_KEY }}
       
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
