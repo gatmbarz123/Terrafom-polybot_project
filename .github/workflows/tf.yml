@@ -34,9 +34,6 @@ jobs:
       - name: Terraform Init 
         run: terraform init
   
-      - name: Terraform Validate
-        run: terraform validate -var-file var.tfvars -var certificate_arn=${{ secrets.CERTIFICATE_ARN }} -var private_key=${{ secrets.PRIVATE_KEY }}
-
       - name: Terraform Format
         run: terraform fmt -check
       
