@@ -9,6 +9,7 @@ on:
 jobs: 
   Build:
     runs-on: ubuntu-latest      
+    
     defaults:
       run:
         working-directory: infrastructure
@@ -31,7 +32,7 @@ jobs:
           aws-region: eu-north-1 
       
       - name: List Infrastructure Directory
-        run: ls -la infrastructure
+        run: ls -la 
  
       - name: Terraform Init 
         run: terraform init
