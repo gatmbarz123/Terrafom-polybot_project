@@ -2,6 +2,8 @@ name: "GitHub Actions terraform build "
 
 on:
   push:
+    paths:
+      - 'infrastructure/**'
     branches:
       - CI-Terraform
 
@@ -33,7 +35,7 @@ jobs:
         run: terraform init
    
       - name: Terraform Plan
-        run: terraform plan -var-file var.tfvars -var certificate_arn=${{ secrets.CERTIFICATE_ARN }} -var private_key=${{ secrets.PRIVATE_KEY }}
+        run: terraform plan --var-file var.tfvars -var certificate_arn=${{ secrets.CERTIFICATE_ARN }} -var private_key=${{ secrets.PRIVATE_KEY }}
         working-directory: infrastructure
       
       - name: Terraform Apply
