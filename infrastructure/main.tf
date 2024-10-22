@@ -29,7 +29,6 @@ module "vpc" {
 
 module "polybot" {
     source = "./module/polybot"
-    ami_id             = data.aws_ami.ubuntu_ami.id 
     instance_type      = "t3.micro"
     key_pairs           = "StockKey"
     vpc_id = module.vpc.vpc_id 
@@ -49,8 +48,7 @@ module "alb"{
 
 
 module "yolo5" {
-    source = "./module/yolo5"
-    ami_id             = data.aws_ami.ubuntu_ami.id 
+    source = "./module/yolo5" 
     instance_type      = "t3.micro"
     key_pairs           = "StockKey"
     vpc_id = module.vpc.vpc_id 
