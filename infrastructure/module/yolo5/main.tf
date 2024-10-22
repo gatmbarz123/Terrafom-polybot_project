@@ -1,5 +1,5 @@
 resource "aws_instance" "yolo5_image"{
-  ami           = var.ami_id
+  ami           = data.aws_ami.ubuntu_ami.id 
   instance_type = var.instance_type
   vpc_security_group_ids = [aws_security_group.yolo5_sg.id]
   key_name  =   var.key_pairs
