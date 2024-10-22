@@ -48,7 +48,7 @@ jobs:
 
       
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/CI-Terraform' && github.event_name == 'push'
         run: terraform apply -var certificate_arn=${{ secrets.CERTIFICATE_ARN }} -var private_key=${{ secrets.PRIVATE_KEY }} -auto-approv
         
         
