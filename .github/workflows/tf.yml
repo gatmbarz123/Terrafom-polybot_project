@@ -2,8 +2,6 @@ name: "GitHub Actions terraform build "
 
 on:
   push:
-    paths:
-      - 'infrastructure/**'
     branches:
       - CI-Terraform
 
