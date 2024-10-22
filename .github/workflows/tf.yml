@@ -2,8 +2,6 @@ name: "GitHub Actions terraform build "
 
 on:
   push:
-    paths:
-      - 'infrastructure/**'
     branches:
       - CI-Terraform
 
@@ -11,6 +9,10 @@ on:
 jobs: 
   Build:
     runs-on: ubuntu-latest      
+    defaults:
+      run:
+        working-directory: infrastructure
+    
     steps:
       - name: Checkout the repo code
         uses: actions/checkout@v3
@@ -33,17 +35,21 @@ jobs:
  
       - name: Terraform Init 
         run: terraform init
-        working-directory: infrastructure
-   
+        
       - name: Terraform Plan
-        run: terraform plan -var certificate_arn=${{ secrets.CERTIFICATE_ARN }} -var private_key=${{ secrets.PRIVATE_KEY }}
-        working-directory: infrastructure
+        run: |  
+          terraform plan \
+          -var="certificate_arn=${CERTIFICATE_ARN}" \
+          -var="private_key=${PRIVATE_KEY}"
+        env:  
+          CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
 
       
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -var certificate_arn=${{ secrets.CERTIFICATE_ARN }} -var private_key=${{ secrets.PRIVATE_KEY }} -auto-approv
-        working-directory: infrastructure
+        
         
       - name: Get Terraform Outputs
         id: outputs
