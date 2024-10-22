@@ -53,7 +53,7 @@ jobs:
           terraform apply \
           -var="certificate_arn=${CERTIFICATE_ARN}" \
           -var="private_key=${PRIVATE_KEY}"\
-          -auto-approv
+          -auto-approve
         env:  
           CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
