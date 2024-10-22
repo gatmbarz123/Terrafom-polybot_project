@@ -36,6 +36,7 @@ jobs:
    
       - name: Terraform Plan
         run: terraform plan -var-file var.tfvars -var certificate_arn=${{ secrets.CERTIFICATE_ARN }} -var private_key=${{ secrets.PRIVATE_KEY }}
+        working-directory: infrastructure
       
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
