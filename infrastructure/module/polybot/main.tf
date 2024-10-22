@@ -1,5 +1,5 @@
 resource "aws_instance" "polybot" {
-  count = 2
+  count = 3
   ami           = var.ami_id
   instance_type = var.instance_type
   vpc_security_group_ids = [aws_security_group.polybot_sg.id]

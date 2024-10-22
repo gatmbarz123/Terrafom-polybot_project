@@ -27,21 +27,24 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-north-1 
+      
+      - name: List Infrastructure Directory
+        run: ls -la infrastructure
  
       - name: Terraform Init 
         run: terraform init
         working-directory: infrastructure
    
       - name: Terraform Plan
-        run: terraform plan -chdir=infrastructure --var-file var.tfvars -var certificate_arn=${{ secrets.CERTIFICATE_ARN }} -var private_key=${{ secrets.PRIVATE_KEY }}
-        
+        run: terraform plan --var-file var.tfvars -var certificate_arn=${{ secrets.CERTIFICATE_ARN }} -var private_key=${{ secrets.PRIVATE_KEY }}
+        working-directory: infrastructure
 
       
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -chdir=infrastructure --var-file var.tfvars -var certificate_arn=${{ secrets.CERTIFICATE_ARN }} -var private_key=${{ secrets.PRIVATE_KEY }} -auto-approv
+        run: terraform apply --var-file var.tfvars -var certificate_arn=${{ secrets.CERTIFICATE_ARN }} -var private_key=${{ secrets.PRIVATE_KEY }} -auto-approv
+        working-directory: infrastructure
         
-
       - name: Get Terraform Outputs
         id: outputs
         run: |
