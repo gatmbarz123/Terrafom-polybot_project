@@ -10,10 +10,7 @@ on:
 
 jobs: 
   Build:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: infrastructure
+    runs-on: ubuntu-latest      
     steps:
       - name: Checkout the repo code
         uses: actions/checkout@v3
@@ -33,15 +30,18 @@ jobs:
  
       - name: Terraform Init 
         run: terraform init
+        working-directory: infrastructure
    
       - name: Terraform Plan
         run: terraform plan --var-file var.tfvars -var certificate_arn=${{ secrets.CERTIFICATE_ARN }} -var private_key=${{ secrets.PRIVATE_KEY }}
         working-directory: infrastructure
+
       
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -var-file var.tfvars -var certificate_arn=${{ secrets.CERTIFICATE_ARN }} -var private_key=${{ secrets.PRIVATE_KEY }} -auto-approv
-
+        working-directory: infrastructure
+        
       - name: Get Terraform Outputs
         id: outputs
         run: |
