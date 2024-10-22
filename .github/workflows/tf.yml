@@ -51,13 +51,13 @@ jobs:
         if: github.ref == 'refs/heads/CI-Terraform' && github.event_name == 'push'
         run: | 
           terraform apply \
-          -var="certificate_arn=${CERTIFICATE_ARN}"\
-          -var="private_key=${PRIVATE_KEY}"\
+          -var="certificate_arn=${CERTIFICATE_ARN}" \
+          -var="private_key=${PRIVATE_KEY}" \
           -auto-approve
-        env:  
+        env:
           CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-        
+
       - name: Get Terraform Outputs
         id: outputs
         run: |
