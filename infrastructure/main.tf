@@ -22,16 +22,16 @@ provider "aws" {
 
 module "vpc" {
   source = "./module/common"
-  s3_name = var.s3_name
-  dynamodb_name = var.dynamodb_name
-  sqs_name  = var.sqs_name
+  s3_name = "polobot.s3.bucket"
+  dynamodb_name = "AIbot"
+  sqs_name  = "polyBotSQS"
 }
 
 module "polybot" {
     source = "./module/polybot"
     ami_id             = data.aws_ami.ubuntu_ami.id 
-    instance_type      = var.instance_type
-    key_pairs           = var.key_pairs
+    instance_type      = "t3.micro"
+    key_pairs           = "StockKey"
     vpc_id = module.vpc.vpc_id 
     subnet_id = module.vpc.public_subnets
     
@@ -42,7 +42,7 @@ module "alb"{
     public_subnets = module.vpc.public_subnets
     vpc_id  = module.vpc.vpc_id
     instance_id = module.polybot.instance_id
-    record_name = var.record_name
+    record_name = "alb.bargutman.click"
     certificate_arn = var.certificate_arn
 }
 
@@ -51,8 +51,8 @@ module "alb"{
 module "yolo5" {
     source = "./module/yolo5"
     ami_id             = data.aws_ami.ubuntu_ami.id 
-    instance_type      = var.instance_type
-    key_pairs           = var.key_pairs
+    instance_type      = "t3.micro"
+    key_pairs           = "StockKey"
     vpc_id = module.vpc.vpc_id 
     subnet_id = module.vpc.public_subnets
     private_key  = var.private_key
