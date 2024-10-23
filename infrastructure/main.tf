@@ -58,5 +58,5 @@ module "yolo5" {
     s3_name = module.vpc.s3_name
     dynamodb_name = module.vpc.dynamodb_name
     sqs_name  = module.vpc.sqs_name
-    record_name = module.alb.alb_url
+    alb_url = module.alb.alb_url
 }
