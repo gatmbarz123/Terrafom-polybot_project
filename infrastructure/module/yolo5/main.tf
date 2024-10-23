@@ -38,9 +38,6 @@ resource "aws_instance" "yolo5_image"{
 resource "aws_ami_from_instance" "ami_yolo5" {
   name               = "ami_yolo5"
   source_instance_id = aws_instance.yolo5_image.id
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "null_resource" "terminate_instance" {
