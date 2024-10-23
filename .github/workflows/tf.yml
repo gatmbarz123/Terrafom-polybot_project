@@ -66,7 +66,8 @@ jobs:
       - name: Capture Terraform Outputs
         id: capture-outputs
         run: |
-          echo "TF_IPS=$(terraform output -json instance_public_ips)" >> $GITHUB_ENV
+          TF_IPS=$(terraform output -json instance_public_ips | jq -r '. | join(",")')
+          echo "TF_IPS=$TF_IPS" >> $GITHUB_ENV
           echo "TF_DYNAMODB_TABLE=$(terraform output -raw dynamodb_name)" >> $GITHUB_ENV
           echo "TF_SQS_URL=$(terraform output -raw sqs_url)" >> $GITHUB_ENV
           echo "TF_S3_NAME=$(terraform output -raw s3_name)" >> $GITHUB_ENV
