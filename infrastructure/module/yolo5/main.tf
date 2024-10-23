@@ -14,7 +14,7 @@ resource "aws_instance" "yolo5_image"{
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = var.private_key  
+    private_key = file(var.private_key)  
     host        = self.public_ip
   }
 
@@ -28,9 +28,6 @@ resource "aws_instance" "yolo5_image"{
       "sudo docker run -d --restart always -e AWS_REGION=${var.aws_region} -e DYNAMODB_TABLE=${var.dynamodb_name} -e S3_BUCKET=${var.s3_name} -e SQS_URL=${var.sqs_name} -eALB_URL=${var.alb_url} diskoproject/yolo5"
     ]
   }
-
-
-
 
   tags = {
     Name = "ami_yolo5"
