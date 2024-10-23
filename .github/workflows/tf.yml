@@ -9,7 +9,8 @@ on:
 jobs: 
   Terraform:
     runs-on: ubuntu-latest      
-    
+    environment: AWS
+
     defaults:
       run:
         working-directory: infrastructure
@@ -29,7 +30,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS.AWS_REGION }}
+          aws-region: ${{ env.AWS_REGION }}
       
       - name: List Infrastructure Directory
         run: ls -la 
