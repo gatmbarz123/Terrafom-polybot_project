@@ -7,7 +7,7 @@ on:
 
 
 jobs: 
-  Build:
+  Terraform:
     runs-on: ubuntu-latest      
     
     defaults:
@@ -29,7 +29,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-north-1 
+          aws-region: ${{ env.AWS_REGION }}
       
       - name: List Infrastructure Directory
         run: ls -la 
@@ -41,10 +41,12 @@ jobs:
         run: |  
           terraform plan \
           -var="certificate_arn=${CERTIFICATE_ARN}" \
-          -var="private_key=${PRIVATE_KEY}"
+          -var="private_key=${PRIVATE_KEY}" \
+          -var="aws_region=$(AWS_REGION)" 
         env:  
           CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          AWS_REGION: ${{env.AWS_REGION}}
 
       
       - name: Terraform Apply
@@ -53,10 +55,12 @@ jobs:
           terraform apply \
           -var="certificate_arn=${CERTIFICATE_ARN}" \
           -var="private_key=${PRIVATE_KEY}" \
+          -var="aws_region=$(AWS_REGION)" \
           -auto-approve
         env:
           CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          AWS_REGION: ${{env.AWS_REGION}}
 
       - name: Get Terraform Outputs
         id: outputs
@@ -65,6 +69,8 @@ jobs:
           echo "::set-output name=dynamodb_name::$(terraform output -raw dynamodb_name)"
           echo "::set-output name=sqs_url::$(terraform output -raw sqs_url)"
           echo "::set-output name=s3_name::$(terraform output -raw s3_name)"
+          echo "::set-output name=alb_url::$(terraform output -raw alb_url)"
+          
       
     
     outputs:
@@ -72,6 +78,45 @@ jobs:
       dynamodb_table_name: ${{ steps.outputs.outputs.dynamodb_table_name }}
       sqs_queue_name: ${{ steps.outputs.outputs.sqs_queue_name }}
       s3_bucket_name: ${{ steps.outputs.outputs.s3_bucket_name }}
+      alb_url: ${{ steps.outputs.outputs.alb_url }}
+  
+    
+  Ansible:
+    runs-on: ubuntu-latest
+    needs : Terraform
+    defaults:
+      run:
+        working-directory: infrastructure/ansible
+
+    steps:
+      - name: Checkout the repo code
+        uses: actions/checkout@v3
+      
+      - name: Install Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+      
+      - name: Create Ansible Inventory
+        run: |
+          echo "[servers]" > inventory.ini
+          echo "${{ fromJson(needs.Terraform.outputs.ips) | join('\n') }}" >> inventory.ini
+        shell: bash
+
+      - name: Run Ansible Playbook
+        run: |
+          ansible-playbook -i inventory.ini playbook.yml \
+          --extra-vars "dynamodb_table_name=${{ needs.Terraform.outputs.dynamodb_table_name }} \ 
+          sqs_queue_name=${{ needs.Terraform.outputs.sqs_queue_nam }} \
+          s3_bucket_name=${{ needs.Terraform.outputs.s3_bucket_name }} \
+          alb_url=${{ needs.Terraform.outputs.sqs_queue_nam }}"
+
+
+      
+
+
+
+
 
 
       

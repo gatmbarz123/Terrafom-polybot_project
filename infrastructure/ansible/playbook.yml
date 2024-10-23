@@ -1,0 +1,33 @@
+---
+- hosts: servers
+  become: true
+  tasks:
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+        update_cache:
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+        enabled: 
+    - name: pull image
+      docker_image:
+        name: diskoproject/polybot:latest
+        source: pull    
+   
+    - name : Install the Image and run the Docker Continer
+      docker-continer: 
+       name: polybot
+       images: diskoproject/polybot:latest
+       state: started
+       restart: yes
+       ports:
+         - "8443:8443"
+       env:
+        AWS_REGION: "${{ env.AWS_REGION }}"
+        DYNAMODB_TABLE: "{{dynamodb_table_name}}"
+        ALB_URL: "{{alb_url}}"
+        S3_BUCKET: "{{s3_bucket_name}}"
+        SQS_URL: "{{sqs_queue_name}}"

@@ -23,3 +23,4 @@ output "instance_public_ips" {
     value       = module.polybot.instance_public_ips
     description = "The public ips of the polybots "
 }
+

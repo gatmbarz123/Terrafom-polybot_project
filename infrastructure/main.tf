@@ -54,4 +54,9 @@ module "yolo5" {
     vpc_id = module.vpc.vpc_id 
     subnet_id = module.vpc.public_subnets
     private_key  = var.private_key
+    aws_region  = var.aws_region
+    s3_name = module.vpc.s3_name
+    dynamodb_name = module.vpc.dynamodb_name
+    sqs_name  = module.vpc.sqs_name
+    record_name = module.alb.alb_url
 }
