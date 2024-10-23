@@ -243,5 +243,6 @@ resource "aws_iam_instance_profile" "profile-yolo5" {
   role = aws_iam_role.yolo5_role.name
 }
 
+
 #------------------------------------------------------------------------
 
