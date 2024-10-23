@@ -4,7 +4,13 @@ resource "aws_instance" "yolo5_image"{
   vpc_security_group_ids = [aws_security_group.yolo5_sg.id]
   key_name  =   var.key_pairs
   subnet_id = var.subnet_id[0] 
-
+  
+  
+  root_block_device {
+    volume_size = 10
+    volume_type = "gp2"
+  }
+  
   connection {
     type        = "ssh"
     user        = "ubuntu"
