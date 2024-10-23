@@ -100,7 +100,7 @@ jobs:
       
       - name: Create Ansible Inventory
         run: |
-          echo "[servers]" > inventory.ini
+          echo "[servers]" >> inventory.ini
           ips=$(echo '${{ needs.Terraform.outputs.ips }}' | jq -r '.[]')
           for ip in $ips; do
             echo "$ip" >> inventory.ini
