@@ -63,23 +63,21 @@ jobs:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           AWS_REGION: ${{ env.AWS_REGION }}
 
-      - name: Get Terraform Outputs
-        id: outputs
+      - name: Capture Terraform Outputs
+        id: capture-outputs
         run: |
-          echo "::set-output name=ips::$(terraform output -json instance_public_ips)"
-          echo "::set-output name=dynamodb_name::$(terraform output -raw dynamodb_name)"
-          echo "::set-output name=sqs_url::$(terraform output -raw sqs_url)"
-          echo "::set-output name=s3_name::$(terraform output -raw s3_name)"
-          echo "::set-output name=alb_url::$(terraform output -raw alb_url)"
+          echo "TF_IPS=$(terraform output -json instance_public_ips)" >> $GITHUB_ENV
+          echo "TF_DYNAMODB_TABLE=$(terraform output -raw dynamodb_name)" >> $GITHUB_ENV
+          echo "TF_SQS_URL=$(terraform output -raw sqs_url)" >> $GITHUB_ENV
+          echo "TF_S3_NAME=$(terraform output -raw s3_name)" >> $GITHUB_ENV
+          echo "TF_ALB_URL=$(terraform output -raw alb_url)" >> $GITHUB_ENV
           
-      
-    
     outputs:
-      ips: ${{ steps.outputs.outputs.ips }}
-      dynamodb_table_name: ${{ steps.outputs.outputs.dynamodb_table_name }}
-      sqs_queue_name: ${{ steps.outputs.outputs.sqs_queue_name }}
-      s3_bucket_name: ${{ steps.outputs.outputs.s3_bucket_name }}
-      alb_url: ${{ steps.outputs.outputs.alb_url }}
+      ips: ${{ steps.capture-outputs.outputs.TF_IPS }}
+      dynamodb_table_name: ${{ steps.capture-outputs.outputs.TF_DYNAMODB_TABLE }}
+      sqs_queue_name: ${{ steps.capture-outputs.outputs.TF_SQS_URL }}
+      s3_bucket_name: ${{ steps.capture-outputs.outputs.TF_S3_NAME }}
+      alb_url: ${{ steps.capture-outputs.outputs.TF_ALB_URL }}
   
     
   Ansible:
@@ -100,20 +98,17 @@ jobs:
       
       - name: Create Ansible Inventory
         run: |
-          echo "[servers]" >> inventory.ini
-          ips=$(echo '${{ needs.Terraform.outputs.ips }}' | jq -r '.[]')
-          for ip in $ips; do
-            echo "$ip" >> inventory.ini
-          done
+          echo "[servers]" > inventory.ini
+          echo "${{ env.TF_IPS }}" | jq -r '.[]' >> inventory.ini
         shell: bash
 
       - name: Run Ansible Playbook
         run: |
           ansible-playbook -i inventory.ini playbook.yml \
-          --extra-vars "dynamodb_table_name=${{ needs.Terraform.outputs.dynamodb_table_name }} \ 
-          sqs_queue_name=${{ needs.Terraform.outputs.sqs_queue_nam }} \
-          s3_bucket_name=${{ needs.Terraform.outputs.s3_bucket_name }} \
-          alb_url=${{ needs.Terraform.outputs.sqs_queue_nam }}"
+          --extra-vars "dynamodb_table_name=${{ env.TF_DYNAMODB_TABLE }} \
+          sqs_queue_name=${{ env.TF_SQS_URL }} \
+          s3_bucket_name=${{ env.TF_S3_NAME }} \
+          alb_url=${{ env.TF_ALB_URL }}"
 
 
       
