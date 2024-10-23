@@ -63,9 +63,17 @@ jobs:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           AWS_REGION: ${{ env.AWS_REGION }}
 
+      - name: Check jq Installation
+        run: |
+          jq --version || echo "jq is not installed."
+
+      
+      
       - name: Capture Terraform Outputs
         id: capture-outputs
         run: |
+          echo "Fetching Terraform outputs..."
+          terraform output -json instance_public_ips || exit 1  # This will print the output directly
           TF_IPS=$(terraform output -json instance_public_ips | jq -r '. | join(",")')
           echo "TF_IPS=$TF_IPS" >> $GITHUB_OUTPUT
           echo "TF_DYNAMODB_TABLE=$(terraform output -raw dynamodb_name)" >> $GITHUB_OUTPUT

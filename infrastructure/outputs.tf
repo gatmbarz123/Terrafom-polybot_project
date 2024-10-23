@@ -20,7 +20,7 @@ output "alb_url" {
 }
 
 output "instance_public_ips" {
-    value       = module.polybot.instance_public_ips
+    value       = join(",", module.polybot.instance_public_ips)
     description = "The public ips of the polybots "
 }
 
