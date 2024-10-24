@@ -66,12 +66,20 @@ jobs:
       - name: Capture Terraform Outputs
         id: outputs
         run: |
-          TF_IPS=$(terraform output -json instance_public_ips | jq -r '.[]' | tr '\n' ' ')
+          TF_IPS=$(terraform output -json instance_public_ips | jq -r '.[] | @csv' | tr -d '"')
           echo "TF_IPS=$TF_IPS" >> "$GITHUB_OUTPUT"
-          echo "::set-outputs name=TF_DYNAMODB_TABL::$(terraform output -raw dynamodb_name)" >> "$GITHUB_OUTPUT"
-          echo "::set-outputs name=TF_SQS_URL::$(terraform output -raw sqs_url)" >> "$GITHUB_OUTPUT"
-          echo "::set-outputs name=TF_S3_NAME::$(terraform output -raw s3_name)" >> "$GITHUB_OUTPUT"
-          echo "::set-outputs name=TF_ALB_URL::$(terraform output -raw alb_url)" >> "$GITHUB_OUTPUT"
+          
+          TF_DYNAMODB_TABLE=$(terraform output -raw dynamodb_name)
+          echo "TF_DYNAMODB_TABL=$TF_DYNAMODB_TABLE" >> "$GITHUB_OUTPUT"
+          
+          TF_SQS_URL=$(terraform output -raw sqs_url)
+          echo "TF_SQS_URL=$TF_SQS_URL" >> "$GITHUB_OUTPUT"
+          
+          TF_S3_NAME=$(terraform output -raw s3_name)
+          echo "TF_S3_NAME=$TF_S3_NAME" >> "$GITHUB_OUTPUT"
+          
+          TF_ALB_URL=$(terraform output -raw alb_url)
+          echo "TF_ALB_URL=$TF_ALB_URL" >> "$GITHUB_OUTPUT"
 
 
     outputs:
