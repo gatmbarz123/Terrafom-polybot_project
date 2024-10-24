@@ -66,12 +66,11 @@ jobs:
       - name: Capture Terraform Outputs
         id: outputs
         run: |
-          TF_IPS=$(terraform output -json instance_public_ips | sed 's/\[//;s/\]//;s/"//g;s/,/, /g')
-          echo "TF_IPS=$TF_IPS" >> "$GITHUB_OUTPUT"
-          echo "TF_DYNAMODB_TABLE=$(terraform output -raw dynamodb_name)" >> "$GITHUB_OUTPUT"
-          echo "TF_SQS_URL=$(terraform output -raw sqs_url)" >> "$GITHUB_OUTPUT"
-          echo "TF_S3_NAME=$(terraform output -raw s3_name)" >> "$GITHUB_OUTPUT"
-          echo "TF_ALB_URL=$(terraform output -raw alb_url)" >> "$GITHUB_OUTPUT"
+          echo "::set-output name=TF_IPS::$(terraform output -json instance_public_ips)" >> "$GITHUB_OUTPUT"
+          echo "::set-output name=TF_DYNAMODB_TABL::$(terraform output -raw dynamodb_name)" >> "$GITHUB_OUTPUT"
+          echo "::set-output name=TF_SQS_URL::$(terraform output -raw sqs_url)" >> "$GITHUB_OUTPUT"
+          echo "::set-output name=TF_S3_NAME::$(terraform output -raw s3_name)" >> "$GITHUB_OUTPUT"
+          echo "::set-output name=TF_ALB_URL::$(terraform output -raw alb_url)" >> "$GITHUB_OUTPUT"
 
 
     outputs:
@@ -101,7 +100,7 @@ jobs:
       - name: Create Ansible Inventory
         run: |
           echo "[servers]" > inventory.ini
-          echo "${{ needs.Terraform.outputs.ips }}" | tr ',' '\n' >> inventory.ini
+          echo "${{ needs.Terraform.outputs.ips }}" | jq -r '.[]' >> inventory.ini
         shell: bash
 
       - name: Run Ansible Playbook
