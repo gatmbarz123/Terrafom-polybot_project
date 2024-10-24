@@ -47,7 +47,7 @@ jobs:
         env:  
           CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          AWS_REGION: ${{ env.AWS_REGION }}
+          AWS_REGION: ${{ vars.AWS_REGION }}
 
       
       - name: Terraform Apply
@@ -61,9 +61,10 @@ jobs:
         env:
           CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          AWS_REGION: ${{ env.AWS_REGION }}
+          AWS_REGION: ${{ vars.AWS_REGION }}
 
       - name: Set Terraform Outputs
+        id: outputs
         run: |
           # Extract public IPs dynamically from Terraform
           TF_IPS=$(terraform output -json instance_public_ips | jq -r '.[]' | tr '\n' ' ')
