@@ -64,23 +64,20 @@ jobs:
           AWS_REGION: ${{ env.AWS_REGION }}
 
       - name: Capture Terraform Outputs
-        id: capture-outputs
+        id: outputs
         run: |
-          OUTPUT=$(terraform output  instance_public_ips)
-          echo "Raw output: $OUTPUT"
-          TF_IPS=$(echo $OUTPUT | tr -d '"' )
-          echo "TF_IPS=$TF_IPS" >> $GITHUB_OUTPUT
-          echo "TF_DYNAMODB_TABLE=$(terraform output  dynamodb_name)" >> $GITHUB_OUTPUT
-          echo "TF_SQS_URL=$(terraform output -raw sqs_url)" >> $GITHUB_OUTPUT
-          echo "TF_S3_NAME=$(terraform output -raw s3_name)" >> $GITHUB_OUTPUT
-          echo "TF_ALB_URL=$(terraform output -raw alb_url)" >> $GITHUB_OUTPUT
+          echo "TF_IPS=$(terraform output -json instance_public_ips)" >> "$GITHUB_OUTPUT"
+          echo "TF_DYNAMODB_TABLE=$(terraform output  dynamodb_name)" >> "$GITHUB_OUTPUT"
+          echo "TF_SQS_URL=$(terraform output -raw sqs_url)" >> "$GITHUB_OUTPUT"
+          echo "TF_S3_NAME=$(terraform output -raw s3_name)" >> "$GITHUB_OUTPUT"
+          echo "TF_ALB_URL=$(terraform output -raw alb_url)" >> "$GITHUB_OUTPUT"
                 
     outputs:
-      ips: ${{ steps.capture-outputs.outputs.TF_IPS }}
-      dynamodb_table_name: ${{ steps.capture-outputs.outputs.TF_DYNAMODB_TABLE }}
-      sqs_queue_name: ${{ steps.capture-outputs.outputs.TF_SQS_URL }}
-      s3_bucket_name: ${{ steps.capture-outputs.outputs.TF_S3_NAME }}
-      alb_url: ${{ steps.capture-outputs.outputs.TF_ALB_URL }}
+      ips: ${{ steps.outputs.outputs.TF_IPS }}
+      dynamodb_table_name: ${{ steps.outputs.outputs.TF_DYNAMODB_TABLE }}
+      sqs_queue_name: ${{ steps.outputs.outputs.TF_SQS_URL }}
+      s3_bucket_name: ${{ steps.outputs.outputs.TF_S3_NAME }}
+      alb_url: ${{ steps.outputs.outputs.TF_ALB_URL }}
   
     
   Ansible:
