@@ -116,6 +116,10 @@ jobs:
           echo "${{ needs.Terraform.outputs.ips }}" | jq -r '.[]' >> inventory.ini
         shell: bash
 
+      - name: Output of the inventory 
+        run: cat inventory.ini
+        shell: bash 
+
       - name: Run Ansible Playbook
         run: |
           ansible-playbook -i inventory.ini playbook.yml \
