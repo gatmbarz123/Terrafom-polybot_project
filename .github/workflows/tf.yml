@@ -64,14 +64,10 @@ jobs:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           AWS_REGION: ${{ vars.AWS_REGION }}
       
-      - name: Enter the ips in inventory.ono file
+      - name: Enter the ips in inventory.ini file
         run: terraform output -json instance_public_ips | jq -r '.[]' >> ansible/inventory.ini 
         shell: bash
-      
-      - name : ls
-        run: ls -la 
-        shell: bash
-      
+ 
       - name: Set Terraform Outputs
         id: outputs
         run: |      
@@ -85,7 +81,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: inventory
-          path: ansible/inventory.ini
+          path: infrastructure/ansible/inventory.ini
       
     outputs:
       dynamodb_table_name: ${{ steps.outputs.outputs.TF_DYNAMODB_TABLE }}
