@@ -127,7 +127,9 @@ jobs:
           ssh-add ~/.ssh/id_rsa
           
            
-      - name: Run Ansible Playbook
+      - name: Run Ansible Playbook\
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
           ansible-playbook -i inventory.ini playbook.yml \
           --extra-vars "dynamodb_table_name=${{ needs.Terraform.outputs.dynamodb_table_name }} \
