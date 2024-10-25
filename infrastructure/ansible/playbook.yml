@@ -7,11 +7,13 @@
         name: docker.io
         state: present
         update_cache: yes
+    
     - name: Ensure Docker service is running
       service:
         name: docker
         state: started
         enabled: yes
+    
     - name: pull image
       docker_image:
         name: diskoproject/polybot:latest
@@ -20,7 +22,7 @@
     - name : Install the Image and run the Docker Continer
       docker_container:
         name: polybot
-        images: diskoproject/polybot:latest
+        image: diskoproject/polybot:latest
         state: started
         restart_policy: always
         ports:
