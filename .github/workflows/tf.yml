@@ -118,7 +118,13 @@ jobs:
         run: |
           echo "${{ secrets.PRIVATE_KEY }}" > private_key.pem
           chmod 600 private_key.pem
-      
+      - name: Debug Outputs
+        run: |
+          echo "DynamoDB Table Name: ${{ needs.Terraform.outputs.dynamodb_table_name }}"
+          echo "SQS Queue Name: ${{ needs.Terraform.outputs.sqs_queue_name }}"
+          echo "S3 Bucket Name: ${{ needs.Terraform.outputs.s3_bucket_name }}"
+          echo "ALB URL: ${{ needs.Terraform.outputs.alb_url }}"
+
       - name: Run Ansible Playbook
         run: |
           ansible-playbook -i inventory.ini playbook.yml \
@@ -127,6 +133,10 @@ jobs:
           sqs_queue_name=${{ needs.Terraform.outputs.sqs_queue_name }} \
           s3_bucket_name=${{ needs.Terraform.outputs.s3_bucket_name }} \
           alb_url=${{ needs.Terraform.outputs.alb_url }}"
+      
+      - name: Remove Private Key
+        run: |
+          rm -f private_key.pem
 
 
       
