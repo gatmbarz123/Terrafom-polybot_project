@@ -83,7 +83,13 @@ jobs:
           TF_ALB_URL=$(terraform output -raw alb_url )
           echo "TF_ALB_URL=$TF_ALB_URL" >> "$GITHUB_OUTPUT"
         shell: bash 
-        
+     
+      - name: Print TF_IPS Output
+         run: |
+           echo "TF_IPS Output:"
+           echo "${{ steps.outputs.outputs.TF_IPS }}"
+         shell: bash
+
 
 
     outputs:
