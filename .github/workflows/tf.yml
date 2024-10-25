@@ -110,6 +110,9 @@ jobs:
           sudo apt update
           sudo apt install -y ansible
       
+      - name: Debug Terraform Outputs
+        run: echo "${{ needs.Terraform.outputs.ips }}"
+      
       - name: Create Ansible Inventory
         run: |
           echo "[servers]" > inventory.ini
