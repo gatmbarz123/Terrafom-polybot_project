@@ -112,6 +112,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: inventory
+          path: infrastructure/ansible
       
       - name: ls the file 
         run: ls -R
