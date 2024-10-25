@@ -118,10 +118,10 @@ jobs:
       - name: Add hosts to known_hosts
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
         run: |
-
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${PRIVATE_KEY}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-add ~/.ssh/id_rsa
