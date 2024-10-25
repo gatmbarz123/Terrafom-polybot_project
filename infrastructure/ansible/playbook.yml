@@ -18,16 +18,16 @@
         source: pull    
    
     - name : Install the Image and run the Docker Continer
-      docker-continer: 
-       name: polybot
-       images: diskoproject/polybot:latest
-       state: started
-       restart_policy: always
-       ports:
-         - "8443:8443"
-       env:
-        AWS_REGION: "${{ env.AWS_REGION }}"
-        DYNAMODB_TABLE: "{{dynamodb_table_name}}"
-        ALB_URL: "{{alb_url}}"
-        S3_BUCKET: "{{s3_bucket_name}}"
-        SQS_URL: "{{sqs_queue_name}}"
+      docker_container:
+        name: polybot
+        images: diskoproject/polybot:latest
+        state: started
+        restart_policy: always
+        ports:
+          - "8443:8443"
+        env:
+         AWS_REGION: "${{ env.AWS_REGION }}"
+         DYNAMODB_TABLE: "{{dynamodb_table_name}}"
+         ALB_URL: "{{alb_url}}"
+         S3_BUCKET: "{{s3_bucket_name}}"
+         SQS_URL: "{{sqs_queue_name}}"
