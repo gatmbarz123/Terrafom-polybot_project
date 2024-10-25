@@ -86,8 +86,11 @@ jobs:
      
       - name: Print TF_IPS Output
         run: |
-          echo "TF_IPS Output:"
           echo "${{ steps.outputs.outputs.TF_IPS }}"
+          echo "${{ steps.outputs.outputs.TF_DYNAMODB_TABLE }}"
+          echo "${{ steps.outputs.outputs.TF_S3_NAME }}"
+          echo "${{ steps.outputs.outputs.TF_SQS_URL }}"
+          echo "${{ steps.outputs.outputs.TF_ALB_URL }}"
         shell: bash
 
 
