@@ -1,7 +1,7 @@
 ---
 - hosts: servers
   become: true
-   vars:
+  vars:
     aws_region: "{{ lookup('env', 'AWS_REGION') }}"
     dynamodb_table_name: "{{ lookup('env', 'DYNAMODB_TABLE') }}"
     alb_url: "{{ lookup('env', 'ALB_URL') }}"
