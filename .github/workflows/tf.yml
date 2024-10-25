@@ -67,16 +67,16 @@ jobs:
         id: outputs
         run: |
 
-          TF_DYNAMODB_TABLE=$(terraform output -raw dynamodb_name)
+          TF_DYNAMODB_TABLE=$(terraform output dynamodb_name)
           echo "TF_DYNAMODB_TABLE=$TF_DYNAMODB_TABLE" >> "$GITHUB_OUTPUT"
         
-          TF_SQS_URL=$(terraform output -raw sqs_url)
+          TF_SQS_URL=$(terraform output sqs_url)
           echo "TF_SQS_URL=$TF_SQS_URL" >> "$GITHUB_OUTPUT"
       
-          TF_S3_NAME=$(terraform output -raw s3_name)
+          TF_S3_NAME=$(terraform output s3_name)
           echo "TF_S3_NAME=$TF_S3_NAME" >> "$GITHUB_OUTPUT"
         
-          TF_ALB_URL=$(terraform output -raw alb_url)
+          TF_ALB_URL=$(terraform output alb_url)
           echo "TF_ALB_URL=$TF_ALB_URL" >> "$GITHUB_OUTPUT"
         shell: bash 
         
