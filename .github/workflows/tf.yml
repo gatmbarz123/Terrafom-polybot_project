@@ -68,6 +68,7 @@ jobs:
         run: |
           echo "[server]" > ansible/inventory.ini
           terraform output -json instance_public_ips | jq -r '.[]' >> ansible/inventory.ini 
+          cat ansible/inventory.ini 
         shell: bash
  
       - name: Set Terraform Outputs
