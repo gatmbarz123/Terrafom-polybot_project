@@ -127,6 +127,7 @@ jobs:
       - name: Run Ansible Playbook
         run: |
           ansible-playbook -i inventory.ini playbook.yml \
+          --private-key private-key.pem \
           --extra-vars "dynamodb_table_name=${{ needs.Terraform.outputs.dynamodb_table_name }} \
           sqs_queue_name=${{ needs.Terraform.outputs.sqs_queue_name }} \
           s3_bucket_name=${{ needs.Terraform.outputs.s3_bucket_name }} \
