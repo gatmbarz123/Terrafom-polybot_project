@@ -65,16 +65,22 @@ jobs:
 
       - name: Debug Terraform Outputs
         run: |
-          echo "Debugging outputs:"
-          echo "DynamoDB Table: $(terraform output -raw dynamodb_name 2>/dev/null)"
-          echo "SQS URL: $(terraform output -raw sqs_url 2>/dev/null)"
-          echo "S3 Name: $(terraform output -raw s3_name 2>/dev/null)"
-          echo "ALB URL: $(terraform output -raw alb_url 2>/dev/null)"
+          DYNAMODB_TABLE=$(terraform output -raw dynamodb_name 2>/dev/null)
+          echo "DynamoDB Table: $DYNAMODB_TABLE"
+          
+          SQS_URL=$(terraform output -raw sqs_url 2>/dev/null)
+          echo "SQS URL: $SQS_URL"
+          
+          S3_NAME=$(terraform output -raw s3_name 2>/dev/null)
+          echo "S3 Name: $S3_NAME"
+          
+          ALB_URL=$(terraform output -raw alb_url 2>/dev/null)
+          echo "ALB URL: $ALB_URL"
       
       
       - name: Set Terraform Outputs
         id: outputs
-        run: |       
+        run: |      
           TF_DYNAMODB_TABLE=$(terraform output -raw dynamodb_name 2>/dev/null)
           echo "TF_DYNAMODB_TABLE=$TF_DYNAMODB_TABLE" >> "$GITHUB_OUTPUT"
       
