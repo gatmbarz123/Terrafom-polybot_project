@@ -24,6 +24,8 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.7.0
+        with:
+          terraform_wrapper: false
      
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -81,16 +83,16 @@ jobs:
       - name: Set Terraform Outputs
         id: outputs
         run: |      
-          TF_DYNAMODB_TABLE=$(terraform output -raw dynamodb_name 2>/dev/null)
+          TF_DYNAMODB_TABLE=$(terraform output -raw dynamodb_name )
           echo "TF_DYNAMODB_TABLE=$TF_DYNAMODB_TABLE" >> "$GITHUB_OUTPUT"
       
-          TF_SQS_URL=$(terraform output -raw sqs_url 2>/dev/null)
+          TF_SQS_URL=$(terraform output -raw sqs_url )
           echo "TF_SQS_URL=$TF_SQS_URL" >> "$GITHUB_OUTPUT"
       
-          TF_S3_NAME=$(terraform output -raw s3_name 2>/dev/null)
+          TF_S3_NAME=$(terraform output -raw s3_name )
           echo "TF_S3_NAME=$TF_S3_NAME" >> "$GITHUB_OUTPUT"
       
-          TF_ALB_URL=$(terraform output -raw alb_url 2>/dev/null)
+          TF_ALB_URL=$(terraform output -raw alb_url )
           echo "TF_ALB_URL=$TF_ALB_URL" >> "$GITHUB_OUTPUT"
         shell: bash 
         
