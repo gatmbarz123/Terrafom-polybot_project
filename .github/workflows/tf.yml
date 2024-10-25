@@ -85,10 +85,10 @@ jobs:
         shell: bash 
      
       - name: Print TF_IPS Output
-         run: |
-           echo "TF_IPS Output:"
-           echo "${{ steps.outputs.outputs.TF_IPS }}"
-         shell: bash
+        run: |
+          echo "TF_IPS Output:"
+          echo "${{ steps.outputs.outputs.TF_IPS }}"
+        shell: bash
 
 
 
