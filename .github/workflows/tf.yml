@@ -64,24 +64,13 @@ jobs:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           AWS_REGION: ${{ vars.AWS_REGION }}
 
-      - name: Debug Terraform Outputs
-        run: |
-          DYNAMODB_TABLE=$(terraform output -raw dynamodb_name 2>/dev/null)
-          echo "DynamoDB Table: $DYNAMODB_TABLE"
-          
-          SQS_URL=$(terraform output -raw sqs_url 2>/dev/null)
-          echo "SQS URL: $SQS_URL"
-          
-          S3_NAME=$(terraform output -raw s3_name 2>/dev/null)
-          echo "S3 Name: $S3_NAME"
-          
-          ALB_URL=$(terraform output -raw alb_url 2>/dev/null)
-          echo "ALB URL: $ALB_URL"
-      
-      
+   
       - name: Set Terraform Outputs
         id: outputs
         run: |      
+          TF_IPS=$(terraform output -json instance_public_ips)
+          echo "TF_IPS=$TP_IPS" >> "$GITHUB_OUTPUT"
+
           TF_DYNAMODB_TABLE=$(terraform output -raw dynamodb_name )
           echo "TF_DYNAMODB_TABLE=$TF_DYNAMODB_TABLE" >> "$GITHUB_OUTPUT"
       
@@ -98,6 +87,7 @@ jobs:
 
 
     outputs:
+      ips: ${{ steps.outputs.outputs.TF_IPS }}
       dynamodb_table_name: ${{ steps.outputs.outputs.TF_DYNAMODB_TABLE }}
       sqs_queue_name: ${{ steps.outputs.outputs.TF_SQS_URL }}
       s3_bucket_name: ${{ steps.outputs.outputs.TF_S3_NAME }}
