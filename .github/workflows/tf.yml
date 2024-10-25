@@ -85,7 +85,7 @@ jobs:
       - name: Upload Inventory as Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: inventory
+          name: inventory.ini
           path: ansible/inventory.ini
       
     outputs:
@@ -109,9 +109,9 @@ jobs:
       - name: Download Inventory Artifact
         uses: actions/download-artifact@v3
         with:
-          name: inventory
+          name: inventory.ini
           path: ansible   
-          
+
       - name: Install Ansible
         run: |
           sudo apt update
