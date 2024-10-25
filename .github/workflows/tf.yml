@@ -64,15 +64,14 @@ jobs:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           AWS_REGION: ${{ vars.AWS_REGION }}
       
-
-      - name : Enter the ips in inventory.ono file
+      - name: Enter the ips in inventory.ono file
         run: terraform output -json instance_public_ips | jq -r '.[]' >> ansible/inventory.ini 
         shell: bash
       
-      - name: Output of the inventory 
-        run: cat ansible/inventory.ini
-        shell: bash 
-   
+      - name : ls
+        run: ls -la 
+        shell: bash
+      
       - name: Set Terraform Outputs
         id: outputs
         run: |      
@@ -85,7 +84,7 @@ jobs:
       - name: Upload Inventory as Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: inventory.ini
+          name: inventory
           path: ansible/inventory.ini
       
     outputs:
@@ -109,8 +108,7 @@ jobs:
       - name: Download Inventory Artifact
         uses: actions/download-artifact@v3
         with:
-          name: inventory.ini
-          path: ansible   
+          name: inventory
 
       - name: Install Ansible
         run: |
