@@ -1,6 +1,7 @@
 output "sqs_url"{
     value = module.vpc.sqs_url
     description = "The URL of ths SQS"
+    sensitive = true
 }
 
 output "dynamodb_name"{
