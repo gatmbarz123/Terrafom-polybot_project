@@ -66,34 +66,23 @@ jobs:
       - name: Set Terraform Outputs
         id: outputs
         run: |
-          # Extract public IPs dynamically from Terraform
-          TF_IPS=$(terraform output -json instance_public_ips | jq -r '.[]' | tr '\n' ' ')
-          echo "TF_IPS=$TF_IPS" >> "$GITHUB_OUTPUT"
-      
-          # Dynamically extract DynamoDB Table Name
+
           TF_DYNAMODB_TABLE=$(terraform output -raw dynamodb_name)
-          echo "TF_DYNAMODB_TABL=$TF_DYNAMODB_TABLE" >> "$GITHUB_OUTPUT"
-      
-          # Dynamically extract SQS URL
+          echo "TF_DYNAMODB_TABLE=$TF_DYNAMODB_TABLE" >> "$GITHUB_OUTPUT"
+        
           TF_SQS_URL=$(terraform output -raw sqs_url)
           echo "TF_SQS_URL=$TF_SQS_URL" >> "$GITHUB_OUTPUT"
       
-          # Dynamically extract S3 Bucket Name
           TF_S3_NAME=$(terraform output -raw s3_name)
           echo "TF_S3_NAME=$TF_S3_NAME" >> "$GITHUB_OUTPUT"
-      
-          # Dynamically extract ALB URL
+        
           TF_ALB_URL=$(terraform output -raw alb_url)
           echo "TF_ALB_URL=$TF_ALB_URL" >> "$GITHUB_OUTPUT"
-        shell: /usr/bin/bash -e {0}
-        env:
-          AWS_DEFAULT_REGION: ${{ vars.AWS_REGION }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        shell: bash 
+        
 
 
     outputs:
-      ips: ${{ steps.outputs.outputs.TF_IPS }}
       dynamodb_table_name: ${{ steps.outputs.outputs.TF_DYNAMODB_TABLE }}
       sqs_queue_name: ${{ steps.outputs.outputs.TF_SQS_URL }}
       s3_bucket_name: ${{ steps.outputs.outputs.TF_S3_NAME }}
