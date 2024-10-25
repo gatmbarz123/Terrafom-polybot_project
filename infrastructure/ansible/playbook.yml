@@ -6,12 +6,12 @@
       apt:
         name: docker.io
         state: present
-        update_cache:
+        update_cache: yes
     - name: Ensure Docker service is running
       service:
         name: docker
         state: started
-        enabled: 
+        enabled: yes
     - name: pull image
       docker_image:
         name: diskoproject/polybot:latest
@@ -22,7 +22,7 @@
        name: polybot
        images: diskoproject/polybot:latest
        state: started
-       restart: yes
+       restart_policy: always
        ports:
          - "8443:8443"
        env:

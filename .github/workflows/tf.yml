@@ -68,7 +68,6 @@ jobs:
         run: |
           echo "[server]" > ansible/inventory.ini
           terraform output -json instance_public_ips | jq -r '.[]' >> ansible/inventory.ini 
-          cat ansible/inventory.ini 
         shell: bash
  
       - name: Set Terraform Outputs
@@ -85,10 +84,6 @@ jobs:
         with:
           name: inventory
           path: infrastructure/ansible/inventory.ini
-      
-      - name: cat
-        run: cat ansible/inventory.ini 
-        shell: bash
       
     outputs:
       dynamodb_table_name: ${{ steps.outputs.outputs.TF_DYNAMODB_TABLE }}
@@ -114,21 +109,20 @@ jobs:
           name: inventory
           path: infrastructure/ansible
       
-      - name: ls the file 
-        run: ls -R
-
       - name: Install Ansible
         run: |
           sudo apt update
           sudo apt install -y ansible
-      
-      - name: Output of the inventory 
-        run: cat inventory.ini
-        shell: bash 
 
+      - name: Add private key
+        run: |
+          echo "${{ secrets.PRIVATE_KEY }} > private_key.pem"
+          chmod 600 private_key.pem
+      
       - name: Run Ansible Playbook
         run: |
           ansible-playbook -i inventory.ini playbook.yml \
+          --private-key private_key.pem \
           --extra-vars "dynamodb_table_name=${{ needs.Terraform.outputs.dynamodb_table_name }} \
           sqs_queue_name=${{ needs.Terraform.outputs.sqs_queue_name }} \
           s3_bucket_name=${{ needs.Terraform.outputs.s3_bucket_name }} \
