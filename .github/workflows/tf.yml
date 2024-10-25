@@ -115,24 +115,28 @@ jobs:
           sudo apt update
           sudo apt install -y ansible
 
-      - name: Add private key
+      - name: Add hosts to known_hosts
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
-          echo "${{ secrets.PRIVATE_KEY }}" > private_key.pem
-          chmod 600 private_key.pem
 
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add ~/.ssh/id_rsa
+          
+           
       - name: Run Ansible Playbook
         run: |
           ansible-playbook -i inventory.ini playbook.yml \
-          --private-key private_key.pem \
           --extra-vars "dynamodb_table_name=${{ needs.Terraform.outputs.dynamodb_table_name }} \
           sqs_queue_name=${{ needs.Terraform.outputs.sqs_queue_name }} \
           s3_bucket_name=${{ needs.Terraform.outputs.s3_bucket_name }} \
           AWS_REGION=${{ vars.AWS_REGION }} \
           alb_url=${{ needs.Terraform.outputs.alb_url }}"
       
-      - name: Remove Private Key
-        run: |
-          rm -f private_key.pem
+      
 
 
       
