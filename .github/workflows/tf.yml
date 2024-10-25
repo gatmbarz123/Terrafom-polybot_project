@@ -66,7 +66,7 @@ jobs:
       - name: Set Terraform Outputs
         id: outputs
         run: |
-          echo "TF_IPS=$(terraform output -json instance_public_ips )" >> "$GITHUB_OUTPUT"
+          echo "TF_IPS=$(terraform output -json instance_public_ips | jq -r '.[]' )" >> "$GITHUB_OUTPUT"
 
           echo "TF_DYNAMODB_TABLE=$(terraform output -raw dynamodb_name)" >> "$GITHUB_OUTPUT"
       
