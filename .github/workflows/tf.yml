@@ -117,21 +117,16 @@ jobs:
 
       - name: Add hosts to known_hosts
         env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
         run: |
-          mkdir -p ~/.ssh
-          echo "${PRIVATE_KEY}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          ssh-add ~/.ssh/id_rsa
+          echo "${PRIVATE_KEY}" > private_key.pem
+          chmod 600 private_key.pem
+          ls -la 
           
-           
-      - name: Run Ansible Playbook\
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+          
+      - name: Run Ansible Playbook
         run: |
-          ansible-playbook -i inventory.ini playbook.yml \
+          nsible-playbook -i inventory.ini playbook.yml \
           --extra-vars "dynamodb_table_name=${{ needs.Terraform.outputs.dynamodb_table_name }} \
           sqs_queue_name=${{ needs.Terraform.outputs.sqs_queue_name }} \
           s3_bucket_name=${{ needs.Terraform.outputs.s3_bucket_name }} \
