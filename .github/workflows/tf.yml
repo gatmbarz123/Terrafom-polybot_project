@@ -68,8 +68,10 @@ jobs:
       - name: Enter the ips in inventory.ini file
         run: |
           echo "[servers]" > ansible/inventory.ini
-          echo "$(terraform output -json instance_public_ips | jq -r '.[]') ansible_user=ubuntu ansible_ssh_private_key_file=private_key.pem ansible_ssh_common_args='-o StrictHostKeyChecking=no'" >> ansible/inventory.ini 
-          cat ansible/inventory.ini
+          for ip in $(terraform output -json instance_public_ips | jq -r '.[]'); do
+           echo "$ip ansible_user=ubuntu ansible_ssh_private_key_file=private_key.pem ansible_ssh_common_args='-o StrictHostKeyChecking=no'" >> ansible/inventory.ini
+          done
+          cat ansible/inventory.ini 
         shell: bash
  
       - name: Set Terraform Outputs
