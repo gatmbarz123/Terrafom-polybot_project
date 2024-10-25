@@ -111,6 +111,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: inventory
+      
+      - name: ls the file 
+        run: ls -R
 
       - name: Install Ansible
         run: |
