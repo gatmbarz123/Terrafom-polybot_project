@@ -82,6 +82,11 @@ jobs:
           echo "TF_ALB_URL=$(terraform output -raw alb_url )" >> "$GITHUB_OUTPUT"
         shell: bash 
      
+      - name: Upload Inventory as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: inventory
+          path: ansible/inventory.ini
       
     outputs:
       dynamodb_table_name: ${{ steps.outputs.outputs.TF_DYNAMODB_TABLE }}
@@ -101,6 +106,12 @@ jobs:
       - name: Checkout the repo code
         uses: actions/checkout@v3
       
+      - name: Download Inventory Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: inventory
+          path: ansible   
+          
       - name: Install Ansible
         run: |
           sudo apt update
