@@ -66,10 +66,10 @@ jobs:
       - name: Debug Terraform Outputs
         run: |
           echo "Debugging outputs:"
-          echo "DynamoDB Table: $(terraform output -raw dynamodb_name)"
-          echo "SQS URL: $(terraform output -raw sqs_url)"
-          echo "S3 Name: $(terraform output -raw s3_name)"
-          echo "ALB URL: $(terraform output -raw alb_url)"
+          echo "DynamoDB Table: $(terraform output -raw dynamodb_name 2>/dev/null)"
+          echo "SQS URL: $(terraform output -raw sqs_url 2>/dev/null)"
+          echo "S3 Name: $(terraform output -raw s3_name 2>/dev/null)"
+          echo "ALB URL: $(terraform output -raw alb_url 2>/dev/null)"
       
       
       - name: Set Terraform Outputs
