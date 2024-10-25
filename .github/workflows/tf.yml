@@ -67,7 +67,7 @@ jobs:
       
       - name: Enter the ips in inventory.ini file
         run: |
-          echo "[server]" > ansible/inventory.ini
+          echo "[servers]" > ansible/inventory.ini
           terraform output -json instance_public_ips | jq -r '.[]' >> ansible/inventory.ini 
         shell: bash
  
