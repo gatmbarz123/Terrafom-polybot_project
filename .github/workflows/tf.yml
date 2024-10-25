@@ -68,11 +68,14 @@ jobs:
       - name : Enter the ips in inventory.ono file
         run: terraform output -json instance_public_ips | jq -r '.[]' >> ansible/inventory.ini 
         shell: bash
+      
+      - name: Output of the inventory 
+        run: cat ansible/inventory.ini
+        shell: bash 
    
       - name: Set Terraform Outputs
         id: outputs
         run: |      
-          echo "TF_IPS=$(terraform output -json instance_public_ips | jr -c . )" >> "$GITHUB_OUTPUT"
           echo "TF_DYNAMODB_TABLE=$(terraform output -raw dynamodb_name )" >> "$GITHUB_OUTPUT"
           echo "TF_SQS_URL=$(terraform output -raw sqs_url )" >> "$GITHUB_OUTPUT"     
           echo "TF_S3_NAME=$(terraform output -raw s3_name )" >> "$GITHUB_OUTPUT"     
@@ -81,7 +84,6 @@ jobs:
      
       
     outputs:
-      
       dynamodb_table_name: ${{ steps.outputs.outputs.TF_DYNAMODB_TABLE }}
       sqs_queue_name: ${{ steps.outputs.outputs.TF_SQS_URL }}
       s3_bucket_name: ${{ steps.outputs.outputs.TF_S3_NAME }}
@@ -103,9 +105,6 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y ansible
-      
-      - name: Debug Terraform Outputs
-        run: echo "${{ needs.Terraform.outputs.ips }}"
       
       - name: Output of the inventory 
         run: cat inventory.ini
