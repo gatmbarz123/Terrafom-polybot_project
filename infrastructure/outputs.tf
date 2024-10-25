@@ -25,3 +25,7 @@ output "instance_public_ips" {
     description = "The public ips of the polybots "
 }
 
+output "ami-image"{
+    value   =   module.yolo5.instance_id
+    description = "The public ips of the ami-image "
+}
