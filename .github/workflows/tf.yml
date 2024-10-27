@@ -34,9 +34,6 @@ jobs:
           aws-region: ${{ vars.AWS_REGION }}
           mask-aws-account-id: 'no'
       
-      - name: List Infrastructure Directory
-        run: ls -la 
- 
       - name: Terraform Init 
         run: terraform init
         
@@ -128,7 +125,7 @@ jobs:
         run: |
           echo "${PRIVATE_KEY}" > private_key.pem
           chmod 600 private_key.pem
-          ls -la 
+          
           
           
       - name: Run Ansible Playbook

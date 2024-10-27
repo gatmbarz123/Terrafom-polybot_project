@@ -7,6 +7,7 @@
     alb_url: "{{ lookup('env', 'ALB_URL') }}"
     s3_bucket_name: "{{ lookup('env', 'S3_BUCKET') }}"
     sqs_queue_name: "{{ lookup('env', 'SQS_URL') }}"
+    
   tasks:
     - name: Install Docker
       apt:

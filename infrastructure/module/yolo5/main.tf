@@ -40,6 +40,7 @@ resource "aws_ami_from_instance" "ami_yolo5" {
   source_instance_id = aws_instance.yolo5_image.id
 }
 
+
 resource "aws_security_group" "yolo5_sg" {
   name        = "yolo5_sg_new"   
   description = "Allow SSH and 8443 traffic"

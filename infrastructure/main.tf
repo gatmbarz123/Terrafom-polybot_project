@@ -22,7 +22,7 @@ provider "aws" {
 
 module "vpc" {
   source = "./module/common"
-  s3_name = "polobot.s3.bucket"
+  s3_name = "polybot.s3.bucket"
   dynamodb_name = "AIbot"
   sqs_name  = "polyBotSQS"
 }
