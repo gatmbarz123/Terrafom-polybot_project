@@ -15,7 +15,7 @@ resource "aws_instance" "polybot" {
 
 
   tags = {
-    Name = "polybot"
+    Name = "polybot-${count.index}"
   }
   
 }
