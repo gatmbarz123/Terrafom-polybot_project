@@ -15,10 +15,18 @@ module "vpc" {
 
 resource "aws_sqs_queue" "polybot_sqs"{
   name = var.sqs_name
+
+  tags  = {
+    Environment = "polybot-project" 
+  }
 }
 
 resource "aws_s3_bucket" "bot_bucket" {
   bucket = var.s3_name
+
+  tags  = {
+    Environment = "polybot-project" 
+  }
 }
 
 resource "aws_dynamodb_table" "dynamodb_bot" {
@@ -29,4 +37,8 @@ resource "aws_dynamodb_table" "dynamodb_bot" {
         type = "S"              
     }
     hash_key = "prediction_id"
+
+    tags  = {
+    Environment = "polybot-project" 
+  }
 }

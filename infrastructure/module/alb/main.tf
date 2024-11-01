@@ -14,7 +14,7 @@ resource "aws_lb" "alb-new" {
   
 
   tags = {
-    Environment = "production"
+    Environment = "polybot-project"
   }
 
 }
