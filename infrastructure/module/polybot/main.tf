@@ -128,4 +128,5 @@ resource "aws_iam_policy" "polybot_policy" {
 resource "aws_iam_instance_profile" "profile-polybot" {
   name = "profile-polybot"
   role = aws_iam_role.polybot_role.name
+  
 }

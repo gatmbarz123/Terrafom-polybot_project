@@ -99,7 +99,4 @@ resource "aws_route53_record" "alb" {
     evaluate_target_health = true
   }
 
-  tags = {
-    Environment = "polybot-project"
-  }
 }
