@@ -98,4 +98,8 @@ resource "aws_route53_record" "alb" {
     zone_id                = aws_lb.alb-new.zone_id
     evaluate_target_health = true
   }
+
+  tags = {
+    Environment = "polybot-project"
+  }
 }
