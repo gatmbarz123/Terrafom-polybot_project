@@ -163,5 +163,5 @@ Test your CI/CD pipline for both the Polybot and Yolo5 microservices.
 [github_actions]: ../../actions
 
 [PolybotServiceDocker]: https://github.com/exit-zero-academy/PolybotServiceDocker
-[botaws2]: https://exit-zero-academy.github.io/DevOpsTheHardWayAssets/img/aws_project_botaws2.png
-[botaws3]: https://exit-zero-academy.github.io/DevOpsTheHardWayAssets/img/aws_project_botaws3.png
+[botaws2]: https://github.com/gatmbarz123/Terrafom-polybot_project/blob/main/Screenshot%20from%202024-10-22%2019-26-49.png
+[botaws3]: https://github.com/gatmbarz123/Terrafom-polybot_project/blob/main/Screenshot%20from%202024-10-22%2019-26-49.png
