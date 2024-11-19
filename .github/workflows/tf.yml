@@ -3,7 +3,7 @@ name: "GitHub Actions terraform build "
 on:
   push:
     branches:
-      - CI-Terraform
+      - main
 
 
 jobs: 
