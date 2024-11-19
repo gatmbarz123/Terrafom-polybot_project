@@ -5,7 +5,7 @@ on:
     paths:
       - 'polybot/**'
     branches:
-      - main
+      - dev
 
 jobs:
   Build:
