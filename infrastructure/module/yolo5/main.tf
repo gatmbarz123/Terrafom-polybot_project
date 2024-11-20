@@ -11,7 +11,6 @@ resource "aws_instance" "yolo5_image"{
     volume_type = "gp2"
   }
 
-
   connection {
     type        = "ssh"
     user        = "ubuntu"
