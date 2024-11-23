@@ -1,4 +1,4 @@
-## Telegram Bot with YOLOv5 and AWS Infrastructure Managed by Terraform
+# Telegram-Bot Project
 This project integrates a Telegram bot (Polybot) with the YOLOv5 AI model to provide object detection for user-uploaded images. Using Terraform, the infrastructure is automated, ensuring scalability, security, and efficient management across AWS services.
 
 ## Project Overview
