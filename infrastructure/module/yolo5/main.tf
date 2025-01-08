@@ -30,6 +30,7 @@ resource "aws_instance" "yolo5_image"{
   }
 
 
+
   tags = {
     Name = "ami_yolo5"
   }
