@@ -5,6 +5,7 @@ resource "aws_instance" "yolo5_image"{
   key_name  =   var.key_pairs
   subnet_id = var.subnet_id[0] 
   
+  iam_instance_profile = aws_iam_instance_profile.profile-yolo5.name
   
   root_block_device {
     volume_size = 10
