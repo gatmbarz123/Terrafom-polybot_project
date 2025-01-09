@@ -9,7 +9,7 @@ output "vpc_id" {
 }
 
 output "sqs_url"{
-  value = aws_sqs_queue.polybot_sqs.id
+  value = aws_sqs_queue.polybot_sqs.url
   description = "The URL of ths SQS"
 }
 
