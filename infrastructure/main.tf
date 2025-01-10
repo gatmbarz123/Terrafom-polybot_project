@@ -60,3 +60,13 @@ module "yolo5" {
     sqs_name  = module.vpc.sqs_url
     alb_url = module.alb.alb_url
 }
+
+module "promethoeus"{
+  source  = "./module/prometheus"
+  instance_type      = "t3.micro"
+  key_pairs           = "StockKey"
+  vpc_id = module.vpc.vpc_id 
+  subnet_id = module.vpc.public_subnets
+  instance_ips = module.polybot.instance_public_ips
+
+}
