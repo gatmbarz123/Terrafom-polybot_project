@@ -17,9 +17,13 @@ resource "aws_instance" "prometheus" {
 
         "sudo apt update -y",
         "sudo apt install -y docker.io",
-        "sudo apt install -y docker-compose",
         "sudo systemctl start docker",
         "sudo systemctl enable docker",
+        "sudo usermod -aG docker $USER",
+        "sudo curl -L 'https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-$(uname -s)-$(uname -m)' -o /usr/local/bin/docker-compose",
+        "sudo chmod +x /usr/local/bin/docker-compose",
+        "sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose",
+        
 
         "sudo mkdir -p /etc/prometheus",
         "sudo mkdir -p /var/lib/prometheus",
