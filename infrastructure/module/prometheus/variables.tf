@@ -24,3 +24,8 @@ variable "subnet_id" {
 variable "instance_ips"{
   type  = list(string)
 }
+
+variable "private_key"{
+   description = "The private path key aws"
+   type        = string
+}

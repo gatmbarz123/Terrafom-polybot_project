@@ -68,5 +68,5 @@ module "promethoeus"{
   vpc_id = module.vpc.vpc_id 
   subnet_id = module.vpc.public_subnets
   instance_ips = module.polybot.instance_public_ips
-
+  private_key  = var.private_key
 }

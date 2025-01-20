@@ -5,34 +5,32 @@ resource "aws_instance" "prometheus" {
     key_name  =   var.key_pairs
     subnet_id = var.subnet_id[0]
     
-    user_data = <<-EOF
-                #!/bin/bash
-                sudo apt-get update -y
-                sudo apt-get install -y docker.io
-                sudo apt-get install -y docker.io docker-compose
-                sudo systemctl start docker
-                sudo systemctl enable docker
-                
-                sudo mkdir -p /etc/prometheus
-                sudo mkdir -p /var/lib/prometheus
+    connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    private_key = var.private_key
+    host        = self.public_ip
+    }
 
-                sudo cat > /etc/prometheus/prometheus.yml <<'EOL'
-                ${data.template_file.prometheus_config.rendered}
-                EOL
+    provisioner "remote-exec" {
+      inline = [
 
-                sudo cat > /etc/docker/daemon.json <<'EOL'
-                ${data.template_file.daemon.rendered}
-                EOL
+        "sudo apt-get update -y",
+        "sudo apt-get install -y docker.io docker-compose",
+        "sudo systemctl start docker",
+        "sudo systemctl enable docker",
 
-                sudo cat > /docker-compose.yml <<'EOL'
-                ${data.template_file.docker-compose.rendered}
-                EOL
+        "sudo mkdir -p /etc/prometheus",
+        "sudo mkdir -p /var/lib/prometheus",
 
-                sudo systemctl restart docker
-                sudo docker-compose up -d
+        "sudo bash -c 'cat > /etc/prometheus/prometheus.yml <<EOL\n${data.template_file.prometheus_config.rendered}\nEOL'",
+        "sudo bash -c 'cat > /etc/docker/daemon.json <<EOL\n${data.template_file.daemon.rendered}\nEOL'",
+        "sudo bash -c 'cat > /docker-compose.yml <<EOL\n${data.template_file.docker-compose.rendered}\nEOL'",
 
-                EOF
-
+        "sudo systemctl restart docker",
+        "sudo docker-compose up -d"
+      ]
+    }
 
     tags = {
       Name = "prometheus-server"
