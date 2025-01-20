@@ -15,8 +15,9 @@ resource "aws_instance" "prometheus" {
     provisioner "remote-exec" {
       inline = [
 
-        "sudo apt-get update -y",
-        "sudo apt-get install -y docker.io docker-compose",
+        "sudo apt update -y",
+        "sudo apt install -y docker.io",
+        "sudo apt install -y docker-compose",
         "sudo systemctl start docker",
         "sudo systemctl enable docker",
 
@@ -42,13 +43,6 @@ resource "aws_security_group" "prometheus_sg" {
     name        = "prometheus_sg"   
     description = "Allow SSH and 9090/3000 traffic"
     vpc_id      = var.vpc_id
-
-    ingress {
-      from_port   = 22
-      to_port     = 22
-      protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
 
     ingress {
       from_port   = 22
