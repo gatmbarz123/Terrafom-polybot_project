@@ -29,7 +29,7 @@ resource "aws_instance" "prometheus" {
 
         "sudo bash -c 'cat > /etc/prometheus/prometheus.yml <<EOL\n${data.template_file.prometheus_config.rendered}\nEOL'",
         "sudo bash -c 'cat > /etc/docker/daemon.json <<EOL\n${data.template_file.daemon.rendered}\nEOL'",
-        "sudo bash -c 'cat > /docker-compose.yml <<EOL\n${data.template_file.docker-compose.rendered}\nEOL'",
+        "sudo bash -c 'cat > /home/ubuntu/docker-compose.yml <<EOL\n${data.template_file.docker-compose.rendered}\nEOL'",
 
         "sudo systemctl restart docker",
         "sudo docker-compose up -d"
