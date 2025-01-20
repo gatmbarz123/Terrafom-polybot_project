@@ -24,15 +24,17 @@ resource "aws_instance" "prometheus" {
         "sudo chmod +x /usr/local/bin/docker-compose",
         "sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose",
 
-        "sudo mkdir -p /etc/prometheus",
-        "sudo mkdir -p /var/lib/prometheus",
+        "sudo mkdir -p /home/ubuntu/prometheus",
 
-        "sudo bash -c 'cat > /etc/prometheus/prometheus.yml <<EOL\n${data.template_file.prometheus_config.rendered}\nEOL'",
+        "sudo bash -c 'cat > /home/ubuntu/prometheus/prometheus.yml <<EOL\n${data.template_file.prometheus_config.rendered}\nEOL'",
         "sudo bash -c 'cat > /etc/docker/daemon.json <<EOL\n${data.template_file.daemon.rendered}\nEOL'",
         "sudo bash -c 'cat > /home/ubuntu/docker-compose.yml <<EOL\n${data.template_file.docker-compose.rendered}\nEOL'",
 
+        "sudo chown -R ubuntu:ubuntu /home/ubuntu/prometheus",
+        "sudo chmod -R 755 /home/ubuntu/prometheus",
+
         "sudo systemctl restart docker",
-        "sudo docker-compose up -d"
+        "cd /home/ubuntu && sudo docker-compose up -d"
       ]
     }
 
