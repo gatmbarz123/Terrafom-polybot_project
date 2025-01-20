@@ -20,7 +20,7 @@ resource "aws_instance" "prometheus" {
         "sudo systemctl start docker",
         "sudo systemctl enable docker",
         "sudo usermod -aG docker $USER",
-        "sudo curl -L 'https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-$(uname -s)-$(uname -m)' -o /usr/local/bin/docker-compose",
+        "sudo curl -L \"https://github.com/docker/compose/releases/download/2.34.4/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose",
         "sudo chmod +x /usr/local/bin/docker-compose",
         "sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose",
         
