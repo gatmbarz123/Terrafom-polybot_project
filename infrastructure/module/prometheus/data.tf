@@ -2,7 +2,7 @@ data "template_file" "prometheus_config" {
   template = file("${path.module}/prometheus.yml")
 
   vars = {
-    targets = join(",", [for ip in var.instance_ips : "'${ip}:5000'"])
+    targets = join(",", [for ip in var.instance_ips : "'${ip}:8443'"])
   }
 }
 
